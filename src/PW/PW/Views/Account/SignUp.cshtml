@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "Sign in";
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/pw-scripts/")
+}
+
+
+<h2>Sign Up</h2>
+
+
+<div ng-controller="PW.AccountController as ctrl" ng-cloak>
+    <div class="alert alert-danger" ng-if="ctrl.inputErrors.length > 0">
+        <div ng-repeat="inputError in ctrl.inputErrors">
+            {{inputError.message}}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="Name">Name: </label>
+        <input ng-model="ctrl.name" class="form-control" type="text" id="Name" name="Name" placeholder="name"/>
+    </div>
+
+    <div class="form-group">
+        <label for="Email">Email: </label>
+        <input ng-model="ctrl.email" class="form-control" type="text" id="Email" name="Email" placeholder="email"/>
+    </div>
+
+    <div class="form-group">
+        <label for="Password">Password: </label>
+        <input ng-model="ctrl.password" class="form-control" type="password" id="Password" name="Password" placeholder="password"/>
+    </div>
+
+    <div class="form-group">
+        <label for="ConfirmPassword">Confirm password: </label>
+        <input ng-model="ctrl.confirmPassword" class="form-control" type="password" id="ConfirmPassword" name="ConfirmPassword" placeholder="confirm password"/>
+    </div>
+
+    <div class="form-group">
+        <div class="">
+            <input type="submit" value="Sign Up" class="btn btn-default btn-info" ng-click="ctrl.signUp()"/>
+        </div>
+    </div>
+</div>
+<p>&nbsp;</p>

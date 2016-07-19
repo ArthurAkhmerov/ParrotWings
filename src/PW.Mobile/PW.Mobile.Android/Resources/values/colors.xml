@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <color name="primary">#2196F3</color>
+  <color name="primaryDark">#1976D2</color>
+  <color name="accent">#E040FB</color>
+  <color name="white">@android:color/white</color>
+  <color name="gray">@android:color/darker_gray</color>
+  <color name="transparent">@android:color/transparent</color>
+  <color name="orange">@android:color/holo_blue_light</color>
+  <color name="background_tab_pressed">#6633B5E5</color>
+
+  <!-- Grey Color Shades -->
+  <color name="grey_25">#FDFDFD</color>
+  <color name="grey_50">#FAFAFA</color>
+  <color name="grey_100">#F5F5F5</color>
+  <color name="grey_200">#EEEEEE</color>
+  <color name="grey_300">#E0E0E0</color>
+  <color name="grey_400">#BDBDBD</color>
+  <color name="grey_500">#9E9E9E</color>
+  <color name="grey_600">#757575</color>
+  <color name="grey_700">#616161</color>
+  <color name="grey_800">#424242</color>
+</resources>

@@ -1,0 +1,54 @@
+﻿
+.pw-closeIcon {
+	cursor:pointer
+}
+
+
+.pw-selectedUsersBox {
+	font-size: 17px; height: auto; margin-top: 3px;
+}
+
+.pw-selectedUserBox {
+	display: inline; 
+	background-color: #008000; color: #ffffff;
+	-ms-border-radius: 2px;
+	border-radius: 2px; 
+	margin: 2px 2px;
+	padding: 2px 2px 2px 10px;
+	float: left;
+}
+
+.pw-unselectUserIcon {
+	cursor: pointer;
+	margin-left: 3px; 
+}
+
+.pw-recipientInput {
+	font-size: 17px;
+	display: inline; 
+	margin-left: 2px;
+	margin-top: 2px;
+	-moz-min-width: 10px;
+	-ms-min-width: 10px;
+	-o-min-width: 10px;
+	-webkit-min-width: 10px;
+	min-width: 10px; 
+	outline-width: 0;
+	border-width: 0;
+}
+
+.pw-usersBox {
+	font-size: 17px; height: auto; margin-top: 1px;
+	max-height: 200px; overflow-y: scroll;
+}
+
+.pw-userBox {
+	cursor: pointer; padding: 2px 3px;
+}
+.pw-userBox:hover {
+	background-color: #cccccc;
+}
+
+.pw-transferNew {
+	background-color: #00cc00;
+}

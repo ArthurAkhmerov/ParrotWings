@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewBag.Title = "Transfers";
+}
+
+@section css {
+    <style>
+        .pw-transfersTable {
+            margin-top: 20px;
+        }
+
+        .pw-UsernameLabel, .pw-DateLabel {
+            margin-top: 10px;
+        }
+
+        .pw-EmptyListMessage {
+            margin-top: 10px;
+        }
+    </style>
+
+    @Styles.Render("~/pw-transfers/");
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/pw-scripts/")
+}
+
+<div ng-controller="PW.TransfersController as ctrl" ng-cloak>
+    <div class="row pw-TransferFilters">
+        <div class="col-md-10">
+            <div>
+                <h2>Transfers</h2>
+                <div class="alert alert-danger" ng-if="ctrl.errorMessage">{{ctrl.errorMessage}}</div>
+                <div class="form-group row">
+                    <label for="Username" class="pw-UsernameLabel col-md-2">Username: </label>
+                    <input ng-model="ctrl.usernameInput" class="form-control col-md-10" type="text" id="Username" name="Username" placeholder="username"/>
+                </div>
+                <div class="form-group row">
+                    <label for="Date" class="pw-DateLabel col-md-2">Created at: </label>
+                    <input id="CurrentDuration" date-range-picker class="form-control date-picker icon-calendar"
+                           ng-enter="ctrl.updateCurrentDuration()"
+                           ng-model="ctrl.currentDuration"
+                           type="text"/>
+                </div>
+
+            </div>
+        </div>
+        <h3 class="col-md-2">PW: {{ctrl.getCurrentUser().balance}}</h3>
+    </div>
+   
+    <div style="min-height: 400px">
+        <div class="">
+            <button class="btn btn-success" ng-click="ctrl.applyFilter()">Apply filter</button>
+            <button class="btn btn-success" ng-click="ctrl.showMakeTransferModal()">Make transfer</button>
+        </div>
+
+        <div>
+            <div ng-if="!(ctrl.transfers.length  > 0)" class="pw-EmptyListMessage">
+                <div class="alert alert-info">There is no transfers</div>
+            </div>
+            <table class="pw-transfersTable table table-bordered table-hover" ng-if="ctrl.transfers.length > 0">
+                <thead>
+                <tr class="row">
+                    <th class="col-md-3">from</th>
+                    <th class="col-md-3">to</th>
+                    <th class="col-md-2">amount</th>
+                    <th class="col-md-2">created at</th>
+                    <th class="col-md-2"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="transfer in ctrl.transfers" class="row" ng-class="{ 'pw-transferNew' : transfer.isNew}">
+                    <td class="col-md-3">{{transfer.data.userFromName}}</td>
+                    <td class="col-md-3">{{transfer.data.userToName}}</td>
+                    <td class="col-md-2">{{transfer.data.amount}}</td>
+                    <td class="col-md-2">{{transfer.data.createdAt | datetime}} </td>
+                    <td class="col-md-2"><a class="btn-link" ng-click="ctrl.showMakeTransferModal(transfer)">Create as a copy</a> </td>
+                </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+    <ul class="pagination" ng-if="ctrl.getPages().length > 1">
+        <li ng-if="ctrl.page > 1">
+            <a href="#"  ng-click="ctrl.prev()">
+                <span >&laquo;</span>
+            </a>
+        </li>
+        <li ng-repeat="page in ctrl.getPages()" ng-class="{'active': page == ctrl.page}">
+            <a href="#" ng-click="ctrl.goToPage(page)" >{{page}}</a>
+        </li>
+        <li ng-if="ctrl.page < ctrl.allPagesCount">
+            <a href="#" ng-click="ctrl.next()">
+                <span>&raquo;</span>
+            </a>
+        </li>
+    </ul>
+
+</div>

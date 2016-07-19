@@ -1,0 +1,43 @@
+﻿<div>
+    <div class="modal-header">
+        <div class="row">
+            <div class="col-md-1 col-md-push-11" title="Close" ng-click="cancel()"><i class="glyphicon glyphicon-remove pw-closeIcon"></i>
+            </div>
+        </div>
+        <h4 class="modal-title"> Make transfer</h4>
+    </div>
+    <div class="modal-body pw-modalBody">
+        <div class="alert alert-danger" ng-if="errorMessage">
+            {{errorMessage}}    
+        </div>
+
+        <div class="form-group">
+            <label for="Amount">Amount: </label>
+            <input class="form-control col" type="number" id="Amount" name="Amount" placeholder="amount"
+                   ng-model="amount" ng-focus="ShowUsersList(false)"/>
+        </div>
+
+        <div class="form-group" ng-click="ShowUsersList(true)" click-anywhere-but-here="ShowUsersList(false)">
+            <label for="Recipient">Recipients: </label>
+            <div id="inviteUsers" class="form-control pw-selectedUsersBox">
+                <div ng-repeat="selectedUser in selectedUsers" class="pw-selectedUserBox">
+                    {{selectedUser.username}} <i class="pw-unselectUserIcon" ng-click="unselectUser(selectedUser)">x</i>
+                </div>
+                <input class="pw-recipientInput" id="Recipient" name="Recipient" placeholder="recipient name" ng-model="recipientInput" ng-focus="ShowUsersList(true)"/>
+            </div>
+            <div id="users" class="form-control pw-usersBox" ng-if="showUsers && recipientInput.length > 0">
+                <div class="pw-userBox" ng-repeat="user in unselectedUsers()  | usersFilter:recipientInput" ng-click="selectUser(user)">
+                    {{user.username}}
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" ng-click="ok()">Send</button>
+        <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+    </div>
+
+</div>

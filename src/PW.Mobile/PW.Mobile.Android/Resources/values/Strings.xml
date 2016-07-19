@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Hello">Hello World, Click Me!</string>
+    <string name="ApplicationName">PW App</string>
+    <string name="profile">Profile</string>
+    <string name="users">Users</string>
+    <string name="transfers">Transfers</string>
+    <string name="create_transfer">Create transfer</string>
+    <string name="feedback">Feedback</string>
+    <string name="signout">Sing Out</string>
+    <string name="transfersEmpty">There is no transfer</string>
+   
+</resources>

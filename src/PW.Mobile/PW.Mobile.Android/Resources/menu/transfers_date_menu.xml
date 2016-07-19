@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <item
+    android:id="@+id/transfers_date_this_week"
+    android:orderInCategory="1"
+    android:title="this week"
+    app:showAsAction="never" />
+  <item
+   android:id="@+id/transfers_this_month"
+   android:orderInCategory="1"
+   android:title="this month"
+   app:showAsAction="never" />
+
+  <item
+    android:id="@+id/transfers_two_month_ago"
+    android:orderInCategory="1"
+    android:title="2 months ago"
+    app:showAsAction="never" />
+
+  <item
+    android:id="@+id/transfers_three_months_ago"
+    android:orderInCategory="2"
+    android:title="3 months ago"
+    app:showAsAction="never" />
+
+
+</menu>

@@ -1,0 +1,26 @@
+﻿<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <group android:checkableBehavior="single">
+    <item
+      android:id="@+id/nav_profile"
+      android:icon="@drawable/ic_account_circle_black_36dp"
+      android:title="@string/profile" />
+    <item
+      android:id="@+id/nav_users"
+      android:icon="@drawable/ic_account_multiple"
+      android:title="@string/users" />
+    <item
+      android:id="@+id/nav_transfers"
+      android:icon="@drawable/ic_account_balance_black_36dp"
+      android:title="@string/transfers" />
+    <item
+      android:id="@+id/nav_create_transfer"
+      android:icon="@drawable/ic_plus"
+      android:title="@string/create_transfer" />
+    <item
+     android:id="@+id/nav_feedback"
+     android:icon="@drawable/ic_feedback_black_36dp"
+     android:title="@string/feedback" />
+    
+  </group>
+ 
+</menu>
