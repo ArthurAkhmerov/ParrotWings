@@ -10,6 +10,7 @@
 		joinUser(userId: string, sessionId: string);
 		updateUserState(userId: string, state: string): void;
 		loadUserData(): ng.IPromise<IUserVDTO>;
+		loadUserById(userId: string): ng.IPromise<IUserVDTO>;
 	}
 
 	export class UserService implements IUserService {
@@ -63,6 +64,19 @@
 			return deferred.promise;
 		}
 
+		public loadUserById(userId: string): ng.IPromise<IUserVDTO> {
+			var deferred = this.$q.defer<IUserVDTO>();
+
+			this.pwApiClient.getUserById(userId)
+				.success((dto: IUserVDTO) => {
+					this.addUser(dto);
+					deferred.resolve(dto);
+				})
+				.error((reason) => deferred.reject(reason));
+
+			return deferred.promise;
+		}
+
 		public loadUsersByFilter(username: string): ng.IPromise<IUserVDTO[]> {
 			var deferred = this.$q.defer<IUserVDTO[]>();
 
@@ -75,6 +89,7 @@
 
 			return deferred.promise;
 		}
+
 
 		public getUsers(): IUserVDTO[] { return this.users; }
 

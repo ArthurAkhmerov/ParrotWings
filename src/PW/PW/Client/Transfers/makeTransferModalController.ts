@@ -29,7 +29,10 @@
 
 			if (transfer) {
 				$scope.amount = transfer.data.amount;
-				$scope.selectedUsers = [this.userService.getUserById(transfer.data.userToId)];
+				this.userService.loadUserById(transfer.data.userToId)
+					.then(dto => {
+						$scope.selectedUsers = [dto];
+					});
 			}
 			$scope.users =  this.userService.getUsers().filter(x => x.id != this.userService.getCurrentUser().id);
 		}

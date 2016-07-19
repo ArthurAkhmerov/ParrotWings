@@ -11,7 +11,7 @@
 		private page: number;
 		private allPagesCount: number;
 
-		public static get PAGE_SIZE(): number { return 5; }
+		public static get PAGE_SIZE(): number { return 10; }
 
 		constructor(private $uibModal: ng.ui.bootstrap.IModalService,
 			private $timeout: ng.ITimeoutService,
