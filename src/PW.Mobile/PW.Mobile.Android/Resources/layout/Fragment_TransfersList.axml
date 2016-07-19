@@ -16,14 +16,4 @@
            android:layout_width="match_parent"
            android:layout_height="fill_parent"
            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-  <!--<com.viewpagerindicator.TitlePageIndicator
-         android:id="@+id/indicator"
-         android:padding="10dip"
-         android:layout_height="wrap_content"
-         android:layout_width="fill_parent" />
-  <android.support.v4.view.ViewPager
-      android:id="@+id/pager"
-      android:layout_width="fill_parent"
-      android:layout_height="0dp"
-      android:layout_weight="1" />-->
 </LinearLayout>

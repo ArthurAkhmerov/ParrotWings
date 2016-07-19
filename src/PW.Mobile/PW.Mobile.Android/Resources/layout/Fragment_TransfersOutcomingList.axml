@@ -6,8 +6,8 @@
     android:layout_height="fill_parent">
     <include
         layout="@layout/transfersEmpty" />
-    <PW.Mobile.Android.Views.BindableGroupListView
-        android:minWidth="25px"
+  <PW.Mobile.Android.Views.TransferGroupListView
+      android:minWidth="25px"
         android:minHeight="25px"
         android:id="@+id/toclist"
         android:layout_width="fill_parent"

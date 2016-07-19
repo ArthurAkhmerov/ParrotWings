@@ -189,8 +189,8 @@
     <Compile Include="Properties\Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="DebugTrace.cs" />
     <Compile Include="Helpers\Settings.cs" />
-    <Compile Include="Views\BindableExpandableListView.cs" />
-    <Compile Include="Views\BindableGroupListAdapter.cs" />
+    <Compile Include="Views\TransferGroupListView.cs" />
+    <Compile Include="Views\Adapters\BindableGroupListAdapter.cs" />
     <Compile Include="Views\ChooseRecipientView.cs" />
     <Compile Include="Views\Fragments\BaseFragment.cs" />
     <Compile Include="Views\Fragments\CreateTransferFragment.cs" />
@@ -257,8 +257,6 @@
     <AndroidResource Include="Resources\layout\Page_Loading.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\ListItem_TransferIncoming.axml" />
-    <AndroidResource Include="Resources\layout\ListItem_TransferOutcoming.axml" />
     <AndroidResource Include="Resources\layout\Fragment_TransfersAllList.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
@@ -370,7 +368,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Fragments\" />
-    <Folder Include="Views\Adapters\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
