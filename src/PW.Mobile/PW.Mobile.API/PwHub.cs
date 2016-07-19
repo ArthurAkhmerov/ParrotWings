@@ -91,7 +91,7 @@ namespace PW.Mobile.API
 		{
 			try
 			{
-				var hash = _securityProvider.CalculateMD5(dto, sessionId);
+				var hash = _securityProvider.CalculateMD5(dto.UserFromId, dto.Amount, dto.RecipientsIds, sessionId);
 
 				return await _hubProxy.Invoke<SendTransferResultVDTO>("SendTransfer", dto, hash);
 			}

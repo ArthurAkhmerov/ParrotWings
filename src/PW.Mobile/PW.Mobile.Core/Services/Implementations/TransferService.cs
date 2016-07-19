@@ -139,8 +139,8 @@ namespace PW.Mobile.Core.Services.Implementations
 
 		public async Task LoadTransfersAsync(DateTime from, DateTime to)
 		{
-			var currentUser = this._userService.GetCurrentUser();
-			var dtos = await _pwApiClient.GetTransfersAsync(currentUser.Id, from, to);
+			var auth = this._authService.GetAuth();
+			var dtos = await _pwApiClient.GetTransfersAsync(auth.UserId, from, to, auth.SessionId);
 
 			_transfers.Clear();
 

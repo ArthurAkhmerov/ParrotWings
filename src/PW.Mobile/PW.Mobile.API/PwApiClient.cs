@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using PW.Mobile.API.DTO;
+using PW.Mobile.Infrastructure.Services;
 
 namespace PW.Mobile.API
 {
@@ -13,16 +14,18 @@ namespace PW.Mobile.API
 		Task<AuthResultVDTO> AuthorizeAsync(AuthRequestVDTO dto);
 		Task<AuthResultVDTO> SignUp(SignupRequestVDTO dto);
 		Task<UserVDTO[]> GetUsersAsync();
-		Task<TransferVDTO[]> GetTransfersAsync(Guid userId, DateTime from, DateTime to);
+		Task<TransferVDTO[]> GetTransfersAsync(Guid userId, DateTime from, DateTime to, Guid sessionId);
 	}
 
 	public class PwApiClient : IPwApiClient
 	{
 		private readonly string _baseAddress;
+		private readonly ISecurityProvider _securityProvider;
 
-		public PwApiClient(string baseAddress)
+		public PwApiClient(string baseAddress, ISecurityProvider securityProvider)
 		{
 			_baseAddress = baseAddress;
+			_securityProvider = securityProvider;
 		}
 
 		public async Task<AuthResultVDTO> AuthorizeAsync(AuthRequestVDTO dto)
@@ -83,7 +86,7 @@ namespace PW.Mobile.API
 			}
 		}
 
-		public async Task<TransferVDTO[]> GetTransfersAsync(Guid userId, DateTime from, DateTime to)
+		public async Task<TransferVDTO[]> GetTransfersAsync(Guid userId, DateTime from, DateTime to, Guid sessionId)
 		{
 			using (var client = new HttpClient())
 			{
@@ -91,9 +94,12 @@ namespace PW.Mobile.API
 				client.DefaultRequestHeaders.Accept.Clear();
 				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+				var hash = _securityProvider.CalculateMD5(userId, sessionId);
+
 				var result = await client.GetAsync($"/api/transfer?userId={userId}" +
 				                                   $"&from={from.ToString("yyyy-MM-dd HH:mm")}" +
-				                                   $"&to={to.ToString("yyyy-MM-dd HH:mm")}");
+				                                   $"&to={to.ToString("yyyy-MM-dd HH:mm")}" +
+				                                   $"&hash={hash}");
 
 				var rawResponse = result.Content.ReadAsByteArrayAsync().Result;
 				var json = Encoding.UTF8.GetString(rawResponse, 0, rawResponse.Length);

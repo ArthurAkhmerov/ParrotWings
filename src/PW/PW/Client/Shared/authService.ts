@@ -16,11 +16,10 @@
 		private auth: Auth;
 
 		constructor(private $q: ng.IQService, private $cookies: ng.cookies.ICookiesService, private pwApiClient: IPwApiClient, private pwHubClient: PwHubClient) {
-			var userId :string= this.$cookies.get("userId");
-			var sessionId: string = this.$cookies.get("sessionId");
+			var pwCookie: string = this.$cookies.get("pw");
 
-			if (userId && sessionId) {
-				this.auth = new Auth(userId, sessionId);
+			if (pwCookie) {
+				this.auth = JSON.parse(pwCookie);
 			}
 		}
 
@@ -35,9 +34,7 @@
 			this.pwApiClient.signIn(authRequestDto).success((result) => {
 				if (result && result.success) {
 					this.auth = new Auth(result.data.userId, result.data.sessionId);
-
-					this.$cookies.put("userId", this.auth.userId, { expires: moment().add("month", 3).toDate(), path: "/" });
-					this.$cookies.put("sessionId", this.auth.sessionId, { expires: moment().add("month", 3).toDate(), path: "/" });
+					this.$cookies.put("pw", JSON.stringify(this.auth), { expires: moment().add("month", 3).toDate(), path: "/" });
 				} else {
 					this.auth = null;
 				}
@@ -65,8 +62,7 @@
 		}
 
 		public signOut(): void {
-			this.$cookies.remove("userId");
-			this.$cookies.remove("sessionId");
+			this.$cookies.remove("pw");
 			this.auth = null;
 		}
 

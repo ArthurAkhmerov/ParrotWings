@@ -45,8 +45,8 @@
 
 		public sendTransfer(dto: ITransferRequestVDTO, sessionId: string): ng.IPromise<ISendTransferResultVDTO> {
 			var deferred = this.$q.defer();
-
-			var hash = this.securityProvider.calculateMD5(dto, sessionId);
+			
+			var hash = this.securityProvider.calculateMD5(dto.userFromId, dto.amount, dto.recipientsIds, sessionId);
 			var result = this.pwHubProxy.invoke('sendTransfer', dto, hash)
 				.then((result: ISendTransferResultVDTO) => {
 					deferred.resolve(result);

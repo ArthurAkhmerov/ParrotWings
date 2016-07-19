@@ -35,9 +35,9 @@
 
 		public loadTransfers(duration: Duration, paging: PagingData): ng.IPromise<Transfer[]> {
 			var deferred = this.$q.defer<Transfer[]>();
-			var currentUser = this.userService.getCurrentUser();
+			var auth = this.authService.getAuth();
 			
-			this.pwApiClient.getTransfers(currentUser.id, duration, paging)
+			this.pwApiClient.getTransfers(auth.userId, duration, paging, auth.sessionId)
 				.success((data: ITransferVDTO[]) => {
 					var dtos = _.sortBy(data, x => x.createdAt);
 					this.transfers = _.map(data, x => this.createTransfer(x));
@@ -51,9 +51,9 @@
 
 		public loadTransfersByUserTo(usernameTo: string, duration: Duration, paging: PagingData): ng.IPromise<Transfer[]> {
 			var deferred = this.$q.defer<Transfer[]>();
-			var currentUser = this.userService.getCurrentUser();
+			var auth = this.authService.getAuth();
 
-			this.pwApiClient.getTransfersByUserTo(currentUser.id, usernameTo, duration, paging)
+			this.pwApiClient.getTransfersByUserTo(auth.userId, usernameTo, duration, paging, auth.sessionId)
 				.success((data: ITransferVDTO[]) => {
 					var dtos = _.sortBy(data, x => x.createdAt);
 					this.transfers = _.map(data, x => this.createTransfer(x));

@@ -43,6 +43,13 @@ namespace PW.Hubs
 		{
 			try
 			{
+				var sessions = _sessionRepository.ListByUser(dto.UserFromId);
+
+				if (sessions.All(x => _securityProvider.CalculateMD5(dto.UserFromId, dto.Amount, dto.RecipientsIds, x.Id) != hash))
+				{
+					return new SendTransferResultVDTO {Success = false};
+				}
+
 				var transfers = dto.RecipientsIds.Select(userToId => new Transfer(dto.UserFromId, userToId, dto.Amount)).ToArray();
 				_transferRepository.MakeTransfers(transfers);
 

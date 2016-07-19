@@ -50,11 +50,13 @@
 
 		public applyFilter() {
 			this.updateCurrentDuration();
+			var auth = this.authService.getAuth();
+
 			if (this.usernameInput && this.usernameInput.trim() != '') {
-				this.pwApiClient.getTransfersCountByUserTo(this.getCurrentUser().id, this.usernameInput, this.duration)
+				this.pwApiClient.getTransfersCountByUserTo(this.getCurrentUser().id, this.usernameInput, this.duration, auth.sessionId)
 					.success(result => this.transfersCount = result);
 			} else {
-				this.pwApiClient.getTransfersCount(this.getCurrentUser().id, this.duration)
+				this.pwApiClient.getTransfersCount(auth.userId, this.duration, auth.sessionId)
 					.success(result => this.transfersCount = result);
 			}
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Http;
 using PW.API.DTO;
 using PW.Domain;
+using PW.Domain.Infrastructure;
 using PW.Domain.Repositories;
 
 namespace PW.API
@@ -12,18 +13,27 @@ namespace PW.API
 	{
 		private readonly ITransferRepository _transferRepository;
 		private readonly IUserRepository _userRepository;
+		private readonly ISessionRepository _sessionRepository;
+		private readonly ISecurityProvider _securityProvider;
 
-
-		public TransferController(ITransferRepository transferRepository, IUserRepository userRepository)
+		public TransferController(ITransferRepository transferRepository, IUserRepository userRepository, ISessionRepository sessionRepository, ISecurityProvider securityProvider)
 		{
 			_transferRepository = transferRepository;
 			_userRepository = userRepository;
+			_sessionRepository = sessionRepository;
+			_securityProvider = securityProvider;
 		}
 
-		public IHttpActionResult Get(Guid userId, DateTime from, DateTime to, int skip = 0, int take = 100)
+		public IHttpActionResult Get(Guid userId, DateTime from, DateTime to, string hash, int skip = 0, int take = 100)
 		{
 			try
 			{
+				var sessions = _sessionRepository.ListByUser(userId);
+				if (sessions.All(x => _securityProvider.CalculateMD5(userId, x.Id) != hash))
+				{
+					return Unauthorized();
+				}
+
 				var transfers = _transferRepository.ListBy(userId, from, to, skip, take);
 				var usersIds = transfers
 					.Select(x => x.UserFromId)
@@ -46,10 +56,16 @@ namespace PW.API
 			}
 		}
 
-		public IHttpActionResult Get(Guid userId, string usernameTo, DateTime from, DateTime to, int skip = 0, int take = 100)
+		public IHttpActionResult Get(Guid userId, string usernameTo, DateTime from, DateTime to, string hash, int skip = 0, int take = 100)
 		{
 			try
 			{
+				var sessions = _sessionRepository.ListByUser(userId);
+				if (sessions.All(x => _securityProvider.CalculateMD5(userId, x.Id) != hash))
+				{
+					return Unauthorized();
+				}
+
 				var transfers = _transferRepository.ListBy(userId, usernameTo, from, to, skip, take);
 				var usersIds = transfers
 					.Select(x => x.UserFromId)
@@ -73,10 +89,16 @@ namespace PW.API
 		}
 
 		[HttpGet]
-		public IHttpActionResult Count(Guid userId, DateTime from, DateTime to)
+		public IHttpActionResult Count(Guid userId, DateTime from, DateTime to, string hash)
 		{
 			try
 			{
+				var sessions = _sessionRepository.ListByUser(userId);
+				if (sessions.All(x => _securityProvider.CalculateMD5(userId, x.Id) != hash))
+				{
+					return Unauthorized();
+				}
+
 				var count = _transferRepository.Count(userId, from, to);
 				return Ok(count);
 			}
@@ -87,10 +109,16 @@ namespace PW.API
 		}
 
 		[HttpGet]
-		public IHttpActionResult Count(Guid userId, string usernameTo, DateTime from, DateTime to)
+		public IHttpActionResult Count(Guid userId, string usernameTo, DateTime from, DateTime to, string hash)
 		{
 			try
 			{
+				var sessions = _sessionRepository.ListByUser(userId);
+				if (sessions.All(x => _securityProvider.CalculateMD5(userId, x.Id) != hash))
+				{
+					return Unauthorized();
+				}
+
 				var count = _transferRepository.Count(userId, usernameTo, from, to);
 				return Ok(count);
 			}

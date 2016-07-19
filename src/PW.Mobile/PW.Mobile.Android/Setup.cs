@@ -51,7 +51,7 @@ namespace PW.Mobile.Android
 			var securityProvider = new SecurityProvider();
 			Mvx.RegisterSingleton<ISecurityProvider>(securityProvider);
 			Mvx.RegisterSingleton<ISettingsProvider>(new SettingsProvider());
-			Mvx.RegisterType<IPwApiClient>(() => new PwApiClient(AppConstants.SERVER_ADDRESS));
+			Mvx.RegisterType<IPwApiClient>(() => new PwApiClient(AppConstants.SERVER_ADDRESS, securityProvider));
 			var pwHub = new PwHub(Mvx.Resolve<IMvxMessenger>(), securityProvider, AppConstants.SERVER_ADDRESS);
 			Mvx.RegisterSingleton<IPwHub>(pwHub);
 			Mvx.RegisterType<IAuthService>(() => Mvx.IocConstruct<AuthService>());
