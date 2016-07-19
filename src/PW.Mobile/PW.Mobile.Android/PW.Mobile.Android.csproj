@@ -190,7 +190,7 @@
     <Compile Include="DebugTrace.cs" />
     <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Views\TransferGroupListView.cs" />
-    <Compile Include="Views\Adapters\BindableGroupListAdapter.cs" />
+    <Compile Include="Views\Adapters\TransferGroupListAdapter.cs" />
     <Compile Include="Views\ChooseRecipientView.cs" />
     <Compile Include="Views\Fragments\BaseFragment.cs" />
     <Compile Include="Views\Fragments\CreateTransferFragment.cs" />
@@ -340,7 +340,6 @@
     <AndroidResource Include="Resources\menu\transfers_date_menu.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <Content Include="ToDo-MvvmCross\_ Droid UI.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PW.Mobile.API\PW.Mobile.API.csproj">

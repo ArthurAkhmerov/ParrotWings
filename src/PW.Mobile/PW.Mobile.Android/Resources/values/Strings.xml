@@ -4,8 +4,8 @@
     <string name="ApplicationName">PW App</string>
     <string name="profile">Profile</string>
     <string name="users">Users</string>
-    <string name="transfers">Transfers</string>
-    <string name="create_transfer">Create transfer</string>
+    <string name="transactions">Transactions</string>
+    <string name="create_transaction">Create transaction</string>
     <string name="feedback">Feedback</string>
     <string name="signout">Sing Out</string>
     <string name="transfersEmpty">There is no transfer</string>

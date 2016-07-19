@@ -38,11 +38,11 @@ namespace PW.Mobile.Android.Views
 						ShowFragmentAt(0);
 						break;
 					case Resource.Id.nav_transfers:
-						Toolbar.Title = Resources.GetString(Resource.String.transfers);
+						Toolbar.Title = Resources.GetString(Resource.String.transactions);
 						ShowFragmentAt(1);
 						break;
-					case Resource.Id.nav_create_transfer:
-						Toolbar.Title = Resources.GetString(Resource.String.create_transfer);
+					case Resource.Id.nav_create_transaction:
+						Toolbar.Title = Resources.GetString(Resource.String.create_transaction);
 						ShowFragmentAt(2);
 						break;
 

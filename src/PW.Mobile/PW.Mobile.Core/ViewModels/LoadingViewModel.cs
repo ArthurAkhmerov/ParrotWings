@@ -42,7 +42,7 @@ namespace PW.Mobile.Core.ViewModels
 			MessageInfo = "Loading users...";
 			await _userService.LoadUsersAsync();
 
-			MessageInfo = "Loading transfers...";
+			MessageInfo = "Loading transactions...";
 			await _transferService.LoadTransfersAsync(DateTime.Now.AddMonths(-2), DateTime.Now.AddMonths(2));
 
 			await _userService.JoinUserAsync(auth.UserId, auth.SessionId);

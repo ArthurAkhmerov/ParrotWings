@@ -78,7 +78,7 @@ namespace PW.Mobile.Core.ViewModels
 		public readonly MenuItem[] MenuItems =
 		{
 			new MenuItem("Users", typeof(UsersListViewModel)), 
-			new MenuItem("Transfers", typeof(TransfersListViewModel)), 
+			new MenuItem("Transactions", typeof(TransfersListViewModel)), 
 			new MenuItem("Create Transfer", typeof(CreateTransferViewModel)), 
 		};
 		

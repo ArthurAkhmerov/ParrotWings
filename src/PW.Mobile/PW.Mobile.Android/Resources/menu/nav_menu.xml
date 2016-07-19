@@ -11,11 +11,11 @@
     <item
       android:id="@+id/nav_transfers"
       android:icon="@drawable/ic_account_balance_black_36dp"
-      android:title="@string/transfers" />
+      android:title="@string/transactions" />
     <item
-      android:id="@+id/nav_create_transfer"
+      android:id="@+id/nav_create_transaction"
       android:icon="@drawable/ic_plus"
-      android:title="@string/create_transfer" />
+      android:title="@string/create_transaction" />
     <item
      android:id="@+id/nav_feedback"
      android:icon="@drawable/ic_feedback_black_36dp"
