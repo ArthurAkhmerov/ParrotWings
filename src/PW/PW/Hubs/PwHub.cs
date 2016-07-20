@@ -50,16 +50,15 @@ namespace PW.Hubs
 					return new SendTransferResultVDTO {Success = false};
 				}
 
-				var transfers = dto.RecipientsIds.Select(userToId => new Transfer(dto.UserFromId, userToId, dto.Amount)).ToArray();
+				var transfers = dto.RecipientsIds.Select(userToId => 
+					new Transfer(_userRepository.GetByKey(dto.UserFromId), _userRepository.GetByKey(userToId), dto.Amount))
+					.ToArray();
 				_transferRepository.MakeTransfers(transfers);
 
 				foreach (var transfer in transfers)
 				{
-					var clients = ConnectedClientsList.Where(x => x.UserId == transfer.UserFromId || x.UserId == transfer.UserToId).ToList();
-
-					var userFrom = this._userRepository.GetByKey(transfer.UserFromId);
-					var userTo = this._userRepository.GetByKey(transfer.UserToId);
-					var transferVdto = TransferVDTO.Create(transfer, userFrom, userTo);
+					var clients = ConnectedClientsList.Where(x => x.UserId == transfer.UserFrom.Id || x.UserId == transfer.UserTo.Id).ToList();
+					var transferVdto = TransferVDTO.Create(transfer);
 
 					clients.ForEach(x => Clients.Client(x.ClientId).transferSent(transferVdto));
 				}

@@ -35,18 +35,7 @@ namespace PW.API
 				}
 
 				var transfers = _transferRepository.ListBy(userId, from, to, skip, take);
-				var usersIds = transfers
-					.Select(x => x.UserFromId)
-					.Concat(transfers.Select(x => x.UserToId))
-					.Distinct();
-
-				var users = _userRepository.ListByIds(usersIds.ToArray());
-
-				var transfersVdtos = transfers.Select(x =>
-					TransferVDTO.Create(x,
-					users.First(y => y.Id == x.UserFromId),
-					users.First(y => y.Id == x.UserToId)))
-				.ToArray();
+				var transfersVdtos = transfers.Select(TransferVDTO.Create).ToArray();
 
 				return Ok(transfersVdtos);
 			}
@@ -67,18 +56,7 @@ namespace PW.API
 				}
 
 				var transfers = _transferRepository.ListBy(userId, usernameTo, from, to, skip, take);
-				var usersIds = transfers
-					.Select(x => x.UserFromId)
-					.Concat(transfers.Select(x => x.UserToId))
-					.Distinct();
-
-				var users = _userRepository.ListByIds(usersIds.ToArray());
-
-				var transfersVdtos = transfers.Select(x =>
-					TransferVDTO.Create(x,
-					users.First(y => y.Id == x.UserFromId),
-					users.First(y => y.Id == x.UserToId)))
-				.ToArray();
+				var transfersVdtos = transfers.Select(TransferVDTO.Create).ToArray();
 
 				return Ok(transfersVdtos);
 			}

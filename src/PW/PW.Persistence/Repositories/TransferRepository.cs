@@ -73,8 +73,8 @@ namespace PW.Persistence.Repositories
 				{
 					foreach (var transfer in transfers)
 					{
-						var userFrom = ctx.Set<UserPDTO>().FirstOrDefault(x => x.Id == transfer.UserFromId);
-						var userTo = ctx.Set<UserPDTO>().FirstOrDefault(x => x.Id == transfer.UserToId);
+						var userFrom = ctx.Set<UserPDTO>().FirstOrDefault(x => x.Id == transfer.UserFrom.Id);
+						var userTo = ctx.Set<UserPDTO>().FirstOrDefault(x => x.Id == transfer.UserTo.Id);
 
 						userFrom.Balance -= transfer.Amount;
 						if (userFrom.Balance < 0) throw new InvalidBalanceException();

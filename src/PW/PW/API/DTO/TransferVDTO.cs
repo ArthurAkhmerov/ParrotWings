@@ -21,15 +21,15 @@ namespace PW.API.DTO
 		[JsonProperty("createdAt")]
 		public DateTime CreatedAt { get; set; }
 
-		public static TransferVDTO Create(Transfer transfer, User userFrom, User userTo)
+		public static TransferVDTO Create(Transfer transfer)
 		{
 			return new TransferVDTO
 			{
 				Id = transfer.Id,
-				UserFromId = transfer.UserFromId,
-				UserFromName = userFrom.Username,
-				UserToId = transfer.UserToId,
-				UserToName = userTo.Username,
+				UserFromId = transfer.UserFrom.Id,
+				UserFromName = transfer.UserFrom.Username,
+				UserToId = transfer.UserTo.Id,
+				UserToName = transfer.UserTo.Username,
 				Amount = transfer.Amount,
 				CreatedAt = transfer.CreatedAt
 			};

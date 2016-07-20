@@ -4,34 +4,34 @@ namespace PW.Domain
 {
 	public class Transfer
 	{
-		public Transfer(Guid userFromId, Guid userToId, int amount)
+		public Transfer(User userFrom, User userTo, int amount)
 		{
 			Id = Guid.NewGuid();
-			UserFromId = userFromId;
-			UserToId = userToId;
+			UserFrom = userFrom;
+			UserTo = userTo;
 			Amount = amount;
 			CreatedAt = DateTime.UtcNow;
 		}
 
 		public Guid Id { get; }
-		public Guid UserFromId { get; }
-		public Guid UserToId { get; }
+		public User UserFrom { get; }
+		public User UserTo { get; }
 		public int Amount { get; }
 		public DateTime CreatedAt { get; }
 
-		internal Transfer(Guid id, Guid userFromId, Guid userToId, int amount, DateTime createdAt)
+		internal Transfer(Guid id, User userFrom, User userTo, int amount, DateTime createdAt)
 		{
 			Id = id;
-			UserFromId = userFromId;
-			UserToId = userToId;
+			UserFrom = userFrom;
+			UserTo= userTo;
 			Amount = amount;
 			CreatedAt = createdAt;
 		}
 
 		protected bool Equals(Transfer other)
 		{
-			return Id.Equals(other.Id) && UserFromId.Equals(other.UserFromId) 
-					&& UserToId.Equals(other.UserToId)
+			return Id.Equals(other.Id) && UserFrom.Equals(other.UserFrom) 
+					&& UserTo.Equals(other.UserTo)
 			       && Amount == other.Amount && CreatedAt.Equals(other.CreatedAt);
 		}
 
@@ -40,8 +40,8 @@ namespace PW.Domain
 			unchecked
 			{
 				var hashCode = Id.GetHashCode();
-				hashCode = (hashCode * 397) ^ UserFromId.GetHashCode();
-				hashCode = (hashCode * 397) ^ UserToId.GetHashCode();
+				hashCode = (hashCode * 397) ^ UserFrom.GetHashCode();
+				hashCode = (hashCode * 397) ^ UserTo.GetHashCode();
 				hashCode = (hashCode * 397) ^ Amount;
 				hashCode = (hashCode * 397) ^ CreatedAt.GetHashCode();
 				return hashCode;
