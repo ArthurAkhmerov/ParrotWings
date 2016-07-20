@@ -40,7 +40,7 @@ namespace PW.Mobile.Core.Services.Implementations
 
 		public async Task LoadUsersAsync()
 		{
-			var dtos = await _pwApiClient.GetUsersAsync();
+			var dtos = await _pwApiClient.GetUsersAsync(0, 100);
 
 			_users.Clear();
 

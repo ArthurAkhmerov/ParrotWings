@@ -17,11 +17,11 @@ namespace PW.API
 			_userRepository = userRepository;
 		}
 
-		public IHttpActionResult Get()
+		public IHttpActionResult Get(int skip = 0, int take = 100)
 		{
 			try
 			{
-				var users = _userRepository.List();
+				var users = _userRepository.List(skip, take);
 				var usersVdtos = users.Select(UserVDTO.Create).ToArray();
 
 				return Ok(usersVdtos);
@@ -63,5 +63,7 @@ namespace PW.API
 				return InternalServerError(ex);
 			}
 		}
+
+		
 	}
 }

@@ -27,26 +27,22 @@ namespace PW.Mobile.Core.Services.Implementations
 			var isOutcoming = IsOutcoming(dto);
 			if (isIncoming)
 			{
-				var userFrom = _userService.GetUsers().FirstOrDefault(x => x.Id == dto.UserFromId);
-				var userTo = _userService.GetUsers().FirstOrDefault(x => x.Id == dto.UserToId);
-
 				DateTime convertedDate = DateTime.SpecifyKind(
 					dto.CreatedAt,
 					DateTimeKind.Utc);
 
-				var transfer = new Transfer(dto.Id, userFrom, userTo, dto.Amount, convertedDate.ToLocalTime(), true);
+				dto.CreatedAt = convertedDate.ToLocalTime();
+				var transfer = new Transfer(dto, true);
 				return transfer;
 			}
 
 			if (isOutcoming)
 			{
-				var userFrom = _userService.GetUsers().FirstOrDefault(x => x.Id == dto.UserFromId);
-				var userTo = _userService.GetUsers().FirstOrDefault(x => x.Id == dto.UserToId);
 				DateTime convertedDate = DateTime.SpecifyKind(
 					dto.CreatedAt,
 					DateTimeKind.Utc);
-
-				var transfer = new Transfer(dto.Id, userFrom, userTo, dto.Amount, convertedDate.ToLocalTime(), false);
+				dto.CreatedAt = convertedDate.ToLocalTime();
+				var transfer = new Transfer(dto, false);
 				return transfer;
 			}
 			return null;
@@ -54,8 +50,8 @@ namespace PW.Mobile.Core.Services.Implementations
 
 		public IReadOnlyCollection<TransferGroupViewModel> GetTransferGroups()
 		{
-			return _transfers.OrderByDescending(x => x.CreatedAt)
-			.GroupBy(x => x.CreatedAt.Date)
+			return _transfers.OrderByDescending(x => x.Data.CreatedAt)
+			.GroupBy(x => x.Data.CreatedAt.Date)
 			.OrderByDescending(x => x.Key)
 			.Select(x => new TransferGroupViewModel(x.Key, x.ToList()))
 			.ToList();
@@ -63,8 +59,8 @@ namespace PW.Mobile.Core.Services.Implementations
 
 		public IReadOnlyCollection<TransferGroupViewModel> GetTransferIncomingGroups()
 		{
-			return _transfers.Where(x => x.IsIncoming).OrderByDescending(x => x.CreatedAt)
-			.GroupBy(x => x.CreatedAt.Date)
+			return _transfers.Where(x => x.IsIncoming).OrderByDescending(x => x.Data.CreatedAt)
+			.GroupBy(x => x.Data.CreatedAt.Date)
 			.OrderByDescending(x => x.Key)
 			.Select(x => new TransferGroupViewModel(x.Key, x.ToList()))
 			.ToList();
@@ -72,8 +68,8 @@ namespace PW.Mobile.Core.Services.Implementations
 
 		public IReadOnlyCollection<TransferGroupViewModel> GetTransferOutcomingGroups()
 		{
-			return _transfers.Where(x => !x.IsIncoming).OrderByDescending(x => x.CreatedAt)
-			.GroupBy(x => x.CreatedAt.Date)
+			return _transfers.Where(x => !x.IsIncoming).OrderByDescending(x => x.Data.CreatedAt)
+			.GroupBy(x => x.Data.CreatedAt.Date)
 			.OrderByDescending(x => x.Key)
 			.Select(x => new TransferGroupViewModel(x.Key, x.ToList()))
 			.ToList();
@@ -96,13 +92,13 @@ namespace PW.Mobile.Core.Services.Implementations
 					if (transfer.IsIncoming)
 					{
 						_transfers.Add(transfer);
-						_userService.ChangeBalance(transfer.Amount);
+						_userService.ChangeBalance(transfer.Data.Amount);
 					}
 
 					if (!transfer.IsIncoming)
 					{
 						_transfers.Add(transfer);
-						_userService.ChangeBalance(-transfer.Amount);
+						_userService.ChangeBalance(-transfer.Data.Amount);
 					}
 				}
 			});
@@ -126,14 +122,14 @@ namespace PW.Mobile.Core.Services.Implementations
 		public IReadOnlyCollection<Transfer> GetIncomingTransfers()
 		{
 			return _transfers
-				.Where(x => x.UserTo.Id == _authService.GetAuth().UserId)
+				.Where(x => x.Data.UserToId == _authService.GetAuth().UserId)
 				.ToArray();
 		}
 
 		public IReadOnlyCollection<Transfer> GetOutcomingTransfers()
 		{
 			return _transfers
-				.Where(x => x.UserFrom.Id == _authService.GetAuth().UserId)
+				.Where(x => x.Data.UserFromId == _authService.GetAuth().UserId)
 				.ToArray();
 		}
 

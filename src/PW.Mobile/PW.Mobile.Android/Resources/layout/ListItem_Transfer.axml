@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="17sp"
-        app:MvxBind="Text UserFrom.Username"
+        app:MvxBind="Text Data.UserFromName"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
     
@@ -53,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="17sp"
-        app:MvxBind="Text UserTo.Username"
+        app:MvxBind="Text Data.UserToName"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
    
@@ -75,7 +75,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:textSize="14sp"
-          app:MvxBind="Text Amount"
+          app:MvxBind="Text Data.Amount"
           android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
     <LinearLayout
@@ -97,7 +97,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:textSize="14sp"
-          app:MvxBind="Text CreatedAt, Converter=DateTimeShort"
+          app:MvxBind="Text Data.CreatedAt, Converter=DateTimeShort"
           android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
   </RelativeLayout>

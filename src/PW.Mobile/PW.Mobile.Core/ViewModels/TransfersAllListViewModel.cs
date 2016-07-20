@@ -30,14 +30,14 @@ namespace PW.Mobile.Core.ViewModels
 				{
 					InvokeOnMainThread(() =>
 					{
-						if (Transfers.Count == 0 || Transfers.Last().Date.Date != DateTime.Now.Date)
+						if (Transfers.Count == 0 || Transfers.First().Date.Date != DateTime.Now.Date)
 						{
 							Transfers.Add(new TransferGroupViewModel(DateTime.Now, new Collection<Transfer>()));
 						}
 
-						var lastTransferGroup = Transfers.Last().ToList();
-						lastTransferGroup.Add(newTransfer);
-						Transfers[Transfers.Count - 1] = new TransferGroupViewModel(DateTime.Now, lastTransferGroup);
+						var firstTransferGroup = Transfers.First().ToList();
+						firstTransferGroup.Insert(0, newTransfer);
+						Transfers[0] = new TransferGroupViewModel(DateTime.Now, firstTransferGroup);
 
 						IsEmptyList = !Transfers.Any();
 					});

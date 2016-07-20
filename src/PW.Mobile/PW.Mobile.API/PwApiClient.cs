@@ -13,7 +13,8 @@ namespace PW.Mobile.API
 	{
 		Task<AuthResultVDTO> AuthorizeAsync(AuthRequestVDTO dto);
 		Task<AuthResultVDTO> SignUp(SignupRequestVDTO dto);
-		Task<UserVDTO[]> GetUsersAsync();
+		Task<UserVDTO[]> GetUsersAsync(int skip, int take);
+		Task<UserVDTO[]> GetUsersAsync(string searchText);
 		Task<TransferVDTO[]> GetTransfersAsync(Guid userId, DateTime from, DateTime to, Guid sessionId);
 	}
 
@@ -28,86 +29,76 @@ namespace PW.Mobile.API
 			_securityProvider = securityProvider;
 		}
 
+		
+
 		public async Task<AuthResultVDTO> AuthorizeAsync(AuthRequestVDTO dto)
 		{
-			using (var client = new HttpClient())
-			{
-				client.BaseAddress = new Uri(_baseAddress);
-				client.DefaultRequestHeaders.Accept.Clear();
-				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-				var json = JsonConvert.SerializeObject(dto);
-				var result =
-					await client.PostAsync("/api/auth", new StringContent(json, Encoding.UTF8, "application/json"));
-
-				var rawResponse = result.Content.ReadAsByteArrayAsync().Result;
-				var jsonResult = Encoding.UTF8.GetString(rawResponse, 0, rawResponse.Length);
-				var authResult = JsonConvert.DeserializeObject<AuthResultVDTO>(jsonResult);
-
-				return authResult;
-			}
+			var json = JsonConvert.SerializeObject(dto);
+			return await PostAsync<AuthResultVDTO>("/api/auth", new StringContent(json, Encoding.UTF8, "application/json"));
+			
 		}
+		
 
 		public async Task<AuthResultVDTO> SignUp(SignupRequestVDTO dto)
 		{
-			using (var client = new HttpClient())
-			{
-				client.BaseAddress = new Uri(_baseAddress);
-				client.DefaultRequestHeaders.Accept.Clear();
-				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-				var json = JsonConvert.SerializeObject(dto);
-				var result =
-					await client.PostAsync("/api/auth/signup", new StringContent(json, Encoding.UTF8, "application/json"));
-
-				var rawResponse = result.Content.ReadAsByteArrayAsync().Result;
-				var jsonResult = Encoding.UTF8.GetString(rawResponse, 0, rawResponse.Length);
-				var authResult = JsonConvert.DeserializeObject<AuthResultVDTO>(jsonResult);
-
-				return authResult;
-			}
+			var json = JsonConvert.SerializeObject(dto);
+			return await PostAsync<AuthResultVDTO>("/api/auth/signup", new StringContent(json, Encoding.UTF8, "application/json"));
 		}
 
-		public async Task<UserVDTO[]> GetUsersAsync()
+		public async Task<UserVDTO[]> GetUsersAsync(int skip, int take)
 		{
-			using (var client = new HttpClient())
-			{
-				client.BaseAddress = new Uri(_baseAddress);
-				client.DefaultRequestHeaders.Accept.Clear();
-				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+			return await GetAsync<UserVDTO[]>($"/api/user?skip={skip}&take={take}");
 
-				var result = await client.GetAsync($"/api/user");
+		}
 
-				var rawResponse = result.Content.ReadAsByteArrayAsync().Result;
-				var json = Encoding.UTF8.GetString(rawResponse, 0, rawResponse.Length);
-				var usersVdtos = JsonConvert.DeserializeObject<UserVDTO[]>(json);
-
-				return usersVdtos;
-			}
+		public async Task<UserVDTO[]> GetUsersAsync(string searchText)
+		{
+			return await GetAsync<UserVDTO[]>($"/api/user?searchText={searchText}");
 		}
 
 		public async Task<TransferVDTO[]> GetTransfersAsync(Guid userId, DateTime from, DateTime to, Guid sessionId)
 		{
+			var hash = _securityProvider.CalculateMD5(userId, sessionId);
+			return await GetAsync<TransferVDTO[]>($"/api/transfer?userId={userId}" +
+												   $"&from={from.ToString("yyyy-MM-dd HH:mm")}" +
+												   $"&to={to.ToString("yyyy-MM-dd HH:mm")}" +
+												   $"&hash={hash}");
+		}
+
+		private async Task<T> PostAsync<T>(string requestUri, HttpContent content)
+		{
 			using (var client = new HttpClient())
 			{
 				client.BaseAddress = new Uri(_baseAddress);
 				client.DefaultRequestHeaders.Accept.Clear();
 				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-				var hash = _securityProvider.CalculateMD5(userId, sessionId);
-
-				var result = await client.GetAsync($"/api/transfer?userId={userId}" +
-				                                   $"&from={from.ToString("yyyy-MM-dd HH:mm")}" +
-				                                   $"&to={to.ToString("yyyy-MM-dd HH:mm")}" +
-				                                   $"&hash={hash}");
+				var result = await client.PostAsync(requestUri, content);
 
 				var rawResponse = result.Content.ReadAsByteArrayAsync().Result;
-				var json = Encoding.UTF8.GetString(rawResponse, 0, rawResponse.Length);
-				var transfersVdtos = JsonConvert.DeserializeObject<TransferVDTO[]>(json);
+				var jsonResult = Encoding.UTF8.GetString(rawResponse, 0, rawResponse.Length);
+				var authResult = JsonConvert.DeserializeObject<T>(jsonResult);
 
-				return transfersVdtos;
+				return authResult;
 			}
 		}
 
+		private async Task<T> GetAsync<T>(string requestUri)
+		{
+			using (var client = new HttpClient())
+			{
+				client.BaseAddress = new Uri(_baseAddress);
+				client.DefaultRequestHeaders.Accept.Clear();
+				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+				var result = await client.GetAsync(requestUri);
+
+				var rawResponse = result.Content.ReadAsByteArrayAsync().Result;
+				var jsonResult = Encoding.UTF8.GetString(rawResponse, 0, rawResponse.Length);
+				var authResult = JsonConvert.DeserializeObject<T>(jsonResult);
+
+				return authResult;
+			}
+		}
 	}
 }

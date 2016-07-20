@@ -14,6 +14,11 @@ namespace PW.Persistence.Repositories
 		{
 		}
 
+		public IReadOnlyCollection<User> List(int skip, int take)
+		{
+			return Query(x => true, x => x.OrderBy(y => y.Username).Skip(skip).Take(take));
+		}
+
 		public IReadOnlyCollection<User> ListByIds(Guid[] ids)
 		{
 			return Query(x => ids.Contains(x.Id));
@@ -26,7 +31,7 @@ namespace PW.Persistence.Repositories
 
 		public IReadOnlyCollection<User> ListBySearchText(string searchText)
 		{
-			return Query(x => x.Username.Contains(searchText) || x.Email.Contains(searchText));
+			return Query(x => x.Username.Contains(searchText) || x.Email.Contains(searchText), x => x.OrderBy(y => y.Username));
 		}
 	}
 }
