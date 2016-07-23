@@ -30,7 +30,7 @@
 						this.authErrors.push({ code: "serverError", message: "The email and password you entered don't match." });
 					}
 				}).catch(reason => {
-					this.serverErrors.push({ code: "server", message: reason });
+					this.authErrors.push({ code: "serverError", message: "The email and password you entered don't match." });
 				});
 			}
 		}

@@ -43,20 +43,8 @@
 					} else {
 						deferred.reject();
 					}
-					
+				}).catch(() => { deferred.reject() });
 
-				});
-
-				//this.pwApiClient.signIn(authRequestDto).success((result) => {
-				//	if (result && result.success) {
-				//		this.auth = new Auth(result.data.userId, result.data.sessionId);
-				//		this.$cookies.put("pw", JSON.stringify(this.token), { expires: moment().add("month", 3).toDate(), path: "/" });
-				//	} else {
-				//		this.auth = null;
-				//	}
-				//	deferred.resolve(result);
-
-				//}).error(reason => deferred.reject(reason));
 			}).error(reason => deferred.reject(reason));
 
 

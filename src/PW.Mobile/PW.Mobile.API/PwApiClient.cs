@@ -12,7 +12,7 @@ namespace PW.Mobile.API
 {
 	public interface IPwApiClient
 	{
-		Task<AuthResultVDTO> AuthorizeAsync(AuthRequestVDTO dto);
+		//Task<AuthResultVDTO> AuthorizeAsync(AuthRequestVDTO dto);
 		Task<AuthResultVDTO> SignUp(SignupRequestVDTO dto);
 		Task<UserVDTO[]> GetUsersAsync(int skip, int take);
 		Task<UserVDTO[]> GetUsersAsync(string searchText);
@@ -38,7 +38,6 @@ namespace PW.Mobile.API
 			_baseAddress = baseAddress;
 			_securityProvider = securityProvider;
 		}
-
 
 		public async Task<TokenResponse> GetTokenAsync(string username, string password)
 		{
@@ -70,15 +69,6 @@ namespace PW.Mobile.API
 				return JsonConvert.DeserializeObject<TokenResponse>(data);
 			}
 		}
-
-
-		public async Task<AuthResultVDTO> AuthorizeAsync(AuthRequestVDTO dto)
-		{
-			var json = JsonConvert.SerializeObject(dto);
-			return await PostAsync<AuthResultVDTO>("/api/auth", new StringContent(json, Encoding.UTF8, "application/json"));
-			
-		}
-		
 
 		public async Task<AuthResultVDTO> SignUp(SignupRequestVDTO dto)
 		{

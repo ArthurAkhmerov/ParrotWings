@@ -2,7 +2,7 @@
 {
 	public class AppConstants
 	{
-		public const string SERVER_ADDRESS = "http://8105c2b7.ngrok.io";
+		public const string SERVER_ADDRESS = "http://42f057d2.ngrok.io";
 
 		public const string APP_NAME = "PW App";
 

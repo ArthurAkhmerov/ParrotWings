@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Platform;
 using PW.Mobile.API;
@@ -27,14 +28,22 @@ namespace PW.Mobile.Core.Services.Implementations
 			};
 
 			var token = await _pwApiClient.GetTokenAsync(authRequestDto.Email, authRequestDto.Password); ;
-			var authResponseDto = await _pwApiClient.AuthorizeAsync(authRequestDto);
 
-			if (authResponseDto != null && authResponseDto.Success && authResponseDto.Data != null)
+			if (token != null && !string.IsNullOrEmpty(token.AccessToken))
 			{
+				var users = await _pwApiClient.GetUsersAsync(authRequestDto.Email);
+				var user = users.FirstOrDefault();
+				if (user != null)
+				{
+					var auth = new Auth(user.Id, token.AccessToken);
+					_settingsProvider.SaveAuth(auth);
+					return auth;
+				}
+				else
+				{
+					return null;
+				}
 				
-				var auth = new Auth(authResponseDto.Data.UserId, token.AccessToken);
-				_settingsProvider.SaveAuth(auth);
-				return auth;
 			}
 			else
 			{

@@ -30,8 +30,6 @@ namespace PW.API
 		{
 			try
 			{
-				var claimsPrincipal = User as ClaimsPrincipal;
-
 				var transfers = _transferRepository.ListBy(userId, from, to, skip, take);
 				var transfersVdtos = transfers.Select(TransferVDTO.Create).ToArray();
 

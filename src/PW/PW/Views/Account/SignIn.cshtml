@@ -15,6 +15,11 @@
             {{inputError.message}}
         </div>
     </div>
+    <div class="alert alert-danger" ng-if="ctrl.authErrors.length > 0">
+        <div ng-repeat="authError in ctrl.authErrors">
+            {{authError.message}}
+        </div>
+    </div>
 
     <div class="form-group">
         <label for="Email">Email: </label>

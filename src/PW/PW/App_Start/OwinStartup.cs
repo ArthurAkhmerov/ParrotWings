@@ -18,6 +18,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
+using PW.Domain.Infrastructure;
 using PW.Domain.Repositories;
 using PW.Persistence.Repositories;
 using PW.Providers;
@@ -49,10 +50,10 @@ namespace PW
 				AllowInsecureHttp = true,
 				TokenEndpointPath = new PathString("/token"),
 				AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
-				Provider = new SimpleAuthorizationServerProvider(_resolver.Resolve<IUserRepository>()),
+				Provider = new SimpleAuthorizationServerProvider(_resolver.Resolve<IUserRepository>(), _resolver.Resolve<ISecurityProvider>()),
 				
 			};
-
+			
 			// Token Generation
 			app.UseOAuthAuthorizationServer(OAuthServerOptions);
 			app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());

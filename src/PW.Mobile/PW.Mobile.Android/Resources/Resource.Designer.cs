@@ -2188,7 +2188,7 @@ namespace PW.Mobile.Android
 			public const int multiply = 2131165207;
 			
 			// aapt resource value: 0x7f070099
-			public const int nav_create_transfer = 2131165337;
+			public const int nav_create_transaction = 2131165337;
 			
 			// aapt resource value: 0x7f07009a
 			public const int nav_feedback = 2131165338;
@@ -2790,7 +2790,7 @@ namespace PW.Mobile.Android
 			public const int character_counter_pattern = 2131361813;
 			
 			// aapt resource value: 0x7f0a001b
-			public const int create_transfer = 2131361819;
+			public const int create_transaction = 2131361819;
 			
 			// aapt resource value: 0x7f0a001c
 			public const int feedback = 2131361820;
@@ -2805,7 +2805,7 @@ namespace PW.Mobile.Android
 			public const int status_bar_notification_info_overflow = 2131361811;
 			
 			// aapt resource value: 0x7f0a001a
-			public const int transfers = 2131361818;
+			public const int transactions = 2131361818;
 			
 			// aapt resource value: 0x7f0a001e
 			public const int transfersEmpty = 2131361822;

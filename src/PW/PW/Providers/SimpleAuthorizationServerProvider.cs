@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Security;
 using Microsoft.Owin.Security.OAuth;
+using PW.Domain.Infrastructure;
 using PW.Domain.Repositories;
 
 namespace PW.Providers
@@ -10,10 +11,12 @@ namespace PW.Providers
 	public class SimpleAuthorizationServerProvider : OAuthAuthorizationServerProvider
 	{
 		private readonly IUserRepository _userRepository;
+		private readonly ISecurityProvider _securityProvider;
 
-		public SimpleAuthorizationServerProvider(IUserRepository userRepository)
+		public SimpleAuthorizationServerProvider(IUserRepository userRepository, ISecurityProvider securityProvider)
 		{
 			_userRepository = userRepository;
+			_securityProvider = securityProvider;
 		}
 
 		public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
@@ -32,7 +35,15 @@ namespace PW.Providers
 				context.SetError("invalid_grant", "The user name or password is incorrect.");
 				return;
 			}
+
 			
+			if (_securityProvider.CalculateMD5(context.Password, user.Salt) != user.HashedPassword)
+			{
+				context.SetError("invalid_grant", "The user name or password is incorrect.");
+				return;
+			}
+
+
 			var identity = new ClaimsIdentity(context.Options.AuthenticationType);
 			
 			identity.AddClaim(new Claim("username", context.UserName));
