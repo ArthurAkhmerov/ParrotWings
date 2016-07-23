@@ -32,7 +32,7 @@ namespace PW.Mobile.Core.ViewModels
 		{
 			var auth = _authService.GetAuth();
 
-			if (auth == null)
+			if (string.IsNullOrEmpty(auth?.AccessToken))
 			{
 				ShowViewModel<LoginViewModel>();
 				Close(this);

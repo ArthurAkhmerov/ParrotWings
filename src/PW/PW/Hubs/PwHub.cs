@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNet.SignalR;
 using Newtonsoft.Json;
 using PW.API.DTO;
@@ -22,6 +23,7 @@ namespace PW.Hubs
 		public Guid UserId { get; set; }
 	}
 
+	[Authorize]
 	public class PwHub: Hub
 	{
 		private readonly IUserRepository _userRepository;
@@ -72,6 +74,8 @@ namespace PW.Hubs
 		{
 			try
 			{
+				var owinContext = Context.Request.GetHttpContext().GetOwinContext();
+
 				var joinedUser = _userRepository.GetByKey(dto.UserId);
 				
 

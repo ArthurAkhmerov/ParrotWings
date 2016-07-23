@@ -51,7 +51,7 @@ namespace PW.Mobile.API
 		event UserLeavedEventHandler UserLeft;
 
 		Task<SendTransferResultVDTO> SendTransferAsync(TransferRequestVDTO dto);
-		Task JoinUserAsync(Guid userId);
+		Task JoinUserAsync(Guid userId, string token);
 		Task LeaveUserAsync(Guid userId);
 	}
 
@@ -100,8 +100,9 @@ namespace PW.Mobile.API
 
 		}
 
-		public async Task JoinUserAsync(Guid userId)
+		public async Task JoinUserAsync(Guid userId, string token)
 		{
+			_hubConnection.Headers.Add("access_token", token);
 			await _hubConnection.Start();
 
 			var dto = new PwClient

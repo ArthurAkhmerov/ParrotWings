@@ -3,6 +3,7 @@ using PW.Domain.Repositories;
 
 namespace PW.Controllers
 {
+	[Authorize]
 	public class TransferController: Controller
 	{
 		public ActionResult Index()

@@ -26,17 +26,15 @@
 				endDate: moment(),
 			};
 
-			this.setupEvents(() => {
-				var token = this.authService.getTokenData();
-				if (token) {
+			var token = this.authService.getTokenData();
+			if (token && token.access_token) {
+				this.setupEvents(token.access_token, () => {
 					this.userService.loadUserData().then(data => {
 						this.applyFilter();
 						this.userService.joinUser(this.getCurrentUser().id);
 					});
-				}
-			});
-
-			
+				});
+			}
 		}
 
 
@@ -52,7 +50,7 @@
 		public applyFilter() {
 			this.updateCurrentDuration();
 			var token = this.authService.getTokenData();
-			
+
 			if (this.usernameInput && this.usernameInput.trim() != '') {
 				this.pwApiClient.getTransfersCountByUserTo(this.getCurrentUser().id, this.usernameInput, this.duration, token.access_token)
 					.success(result => this.transfersCount = result);
@@ -96,7 +94,7 @@
 					for (var i = 1; i <= 12; i++) {
 						input.push(i);
 					}
-				}  else {
+				} else {
 					for (var i = 1; i <= this.allPagesCount; i++) {
 						input.push(i);
 					}
@@ -122,7 +120,7 @@
 			}
 		}
 
-		private setupEvents(callback: any): void {
+		private setupEvents(accessToken: string, callback: any): void {
 			var events: SignalrEvents[] = [];
 
 			events.push(<SignalrEvents>{
@@ -165,7 +163,7 @@
 				}
 			});
 
-			this.pwHubClient.on(events, callback);
+			this.pwHubClient.on(events, callback, accessToken);
 		}
 
 		public getCurrentUser(): IUserVDTO {

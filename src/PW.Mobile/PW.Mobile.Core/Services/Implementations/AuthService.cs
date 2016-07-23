@@ -66,7 +66,7 @@ namespace PW.Mobile.Core.Services.Implementations
 		public void SignOut()
 		{
 			var auth = _settingsProvider.GetAuth();
-			auth.IsLoggedIn = false;
+			auth.AccessToken = null;
 
 			_settingsProvider.SaveAuth(auth);
 		}
@@ -74,7 +74,7 @@ namespace PW.Mobile.Core.Services.Implementations
 		public bool IsSignedIn()
 		{
 			var auth = _settingsProvider.GetAuth();
-			return auth != null && auth.IsLoggedIn;
+			return !string.IsNullOrEmpty(auth?.AccessToken);
 		}
 
 		public Auth GetAuth()

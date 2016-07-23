@@ -55,8 +55,11 @@ namespace PW.Mobile.Core.Services.Implementations
 
 		public async Task JoinUserAsync(Guid userId)
 		{
-			
-			await _pwHub.JoinUserAsync(userId);
+			var auth = _authService.GetAuth();
+			if (auth != null && !string.IsNullOrEmpty(auth.AccessToken))
+			{
+				await _pwHub.JoinUserAsync(userId, auth.AccessToken);
+			}
 		}
 
 		public void ChangeBalance(int value)

@@ -13,10 +13,10 @@
 			private securityProvider: ISecurityProvider) {
 		}
 
-		public on(events: SignalrEvents[], callback) {
+		public on(events: SignalrEvents[], callback, accessToken: string) {
 			var connection = $.hubConnection();
-			var signalRChatHub = connection.chatHub;
 			this.pwHubProxy = connection.createHubProxy('pwHub');
+			this.pwHubProxy.connection.qs = { "access_token": accessToken };
 			var rootTemp = this.$rootScope;
 
 			events.forEach(e => {
