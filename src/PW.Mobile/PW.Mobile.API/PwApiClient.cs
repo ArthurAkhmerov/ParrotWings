@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -15,7 +16,16 @@ namespace PW.Mobile.API
 		Task<AuthResultVDTO> SignUp(SignupRequestVDTO dto);
 		Task<UserVDTO[]> GetUsersAsync(int skip, int take);
 		Task<UserVDTO[]> GetUsersAsync(string searchText);
-		Task<TransferVDTO[]> GetTransfersAsync(Guid userId, DateTime from, DateTime to, Guid sessionId);
+		Task<TransferVDTO[]> GetTransfersAsync(Guid userId, DateTime from, DateTime to, string accessToken);
+		Task<TokenResponse> GetTokenAsync(string username, string password);
+	}
+
+	public class TokenResponse
+	{
+		[JsonProperty("access_token")]
+		public string AccessToken { get; set; }
+		[JsonProperty("refresh_token")]
+		public string RefreshToken { get; set; }
 	}
 
 	public class PwApiClient : IPwApiClient
@@ -29,7 +39,38 @@ namespace PW.Mobile.API
 			_securityProvider = securityProvider;
 		}
 
-		
+
+		public async Task<TokenResponse> GetTokenAsync(string username, string password)
+		{
+			using (var client = new HttpClient())
+			{
+				client.BaseAddress = new Uri(_baseAddress);
+				var rawResult = await client.PostAsync("/token",
+					new FormUrlEncodedContent(new[]
+					{
+						new KeyValuePair<string, string>(
+							"grant_type",
+							"password"),
+
+						new KeyValuePair<string, string>(
+							"scope",
+							"openid profile offline_access"),
+
+						new KeyValuePair<string, string>(
+							"username",
+							username),
+
+						new KeyValuePair<string, string>(
+							"password",
+							password),
+					}));
+
+				var data = await rawResult.Content.ReadAsStringAsync();
+
+				return JsonConvert.DeserializeObject<TokenResponse>(data);
+			}
+		}
+
 
 		public async Task<AuthResultVDTO> AuthorizeAsync(AuthRequestVDTO dto)
 		{
@@ -56,13 +97,28 @@ namespace PW.Mobile.API
 			return await GetAsync<UserVDTO[]>($"/api/user?searchText={searchText}");
 		}
 
-		public async Task<TransferVDTO[]> GetTransfersAsync(Guid userId, DateTime from, DateTime to, Guid sessionId)
+		public async Task<TransferVDTO[]> GetTransfersAsync(Guid userId, DateTime from, DateTime to, string accessToken)
 		{
-			var hash = _securityProvider.CalculateMD5(userId, sessionId);
-			return await GetAsync<TransferVDTO[]>($"/api/transfer?userId={userId}" +
-												   $"&from={from.ToString("yyyy-MM-dd HH:mm")}" +
-												   $"&to={to.ToString("yyyy-MM-dd HH:mm")}" +
-												   $"&hash={hash}");
+			using (var client = new HttpClient())
+			{
+				client.BaseAddress = new Uri(_baseAddress);
+				client.DefaultRequestHeaders.Accept.Clear();
+				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+				client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+				var requestUri = $"/api/transfer?userId={userId}" +
+				                    $"&from={@from.ToString("yyyy-MM-dd HH:mm")}" +
+				                    $"&to={to.ToString("yyyy-MM-dd HH:mm")}";
+
+				client.BaseAddress = new Uri(_baseAddress);
+				var result = await client.GetAsync(requestUri);
+
+				var rawResponse = result.Content.ReadAsByteArrayAsync().Result;
+				var jsonResult = Encoding.UTF8.GetString(rawResponse, 0, rawResponse.Length);
+				var authResult = JsonConvert.DeserializeObject<TransferVDTO[]>(jsonResult);
+
+				return authResult;
+			}
 		}
 
 		private async Task<T> PostAsync<T>(string requestUri, HttpContent content)

@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
+using System.Web;
+using System.Net.Http;
 using System.Web.Http;
 using System.Web.Security;
+using Microsoft.AspNet.Identity;
 using PW.API.DTO;
 using PW.Domain;
 using PW.Domain.Infrastructure;
 using PW.Domain.Repositories;
+using Thinktecture.IdentityModel.Clients;
+using Microsoft.Owin.Security;
+using System.Web.Http.Owin;
 
 namespace PW.API
 {
@@ -22,7 +29,7 @@ namespace PW.API
 			_securityProvider = securityProvider;
 		}
 
-		[HttpPost]
+		[System.Web.Mvc.HttpPost]
 		public IHttpActionResult SignIn([FromBody] AuthRequestVDTO dto)
 		{
 			try
@@ -50,7 +57,7 @@ namespace PW.API
 				}
 
 
-				FormsAuthentication.SetAuthCookie(user.Email, false);
+				//FormsAuthentication.SetAuthCookie(user.Email, false);
 				var session = new Session(user.Id);
 				_sessionRepository.SaveOrUpdate(session);
 
@@ -64,6 +71,23 @@ namespace PW.API
 					Success = true
 				};
 
+			//	var client = new OAuth2Client(new Uri("http://localhost:58255/connect/token"),
+			//	"socialnetwork", "secret");
+
+			//	var requestResponse = client.RequestAccessTokenUserName(dto.Email, dto.Password,
+			//		"openid profile offline_access");
+
+			//	var claims = new[]
+			//	{
+			//	new Claim("access_token", requestResponse.AccessToken),
+			//	new Claim("refresh_token", requestResponse.RefreshToken)
+			//};
+
+			//	var claimsIdentity = new ClaimsIdentity(claims,
+			//		DefaultAuthenticationTypes.ApplicationCookie);
+
+			//	Request.GetOwinContext().Authentication.SignIn(claimsIdentity);
+
 				return Ok(authResult);
 			}
 			catch (Exception ex)
@@ -72,7 +96,7 @@ namespace PW.API
 			}
 		}
 
-		[HttpPost]
+		[System.Web.Mvc.HttpPost]
 		public IHttpActionResult SignUp([FromBody] SignupRequestVDTO dto)
 		{
 			try

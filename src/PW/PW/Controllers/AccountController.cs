@@ -37,32 +37,5 @@ namespace PW.Controllers
 			FormsAuthentication.SignOut();
 			return RedirectToAction("Signin", "Account");
 		}
-
-		//[HttpPost]
-		//public ActionResult Signin(AuthRequestVDTO dto)
-		//{
-		//	var usersByEmail = _userRepository.ListByEmail(dto.Email);
-
-		//	if (!usersByEmail.Any())
-		//	{
-		//		ViewBag.ErrorMessage = "The email and password you entered don't match.";
-		//		return View();
-		//	}
-		//	var user = usersByEmail.First();
-
-		//	if (_securityProvider.CalculateMD5(dto.Password, user.Salt) == user.HashedPassword)
-		//	{
-		//		var session = new Session(user.Id);
-		//		_sessionRepository.SaveOrUpdate(session);
-		//		FormsAuthentication.SetAuthCookie(user.Email, false);
-		//		return RedirectToAction("Index", "Home");
-		//	}
-
-		//	ViewBag.ErrorMessage = "The email and password you entered don't match.";
-
-		//	return View();
-		//}
-
-
 	}
 }

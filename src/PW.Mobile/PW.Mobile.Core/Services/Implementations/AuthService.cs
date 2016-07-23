@@ -26,11 +26,13 @@ namespace PW.Mobile.Core.Services.Implementations
 				Password = password
 			};
 
+			var token = await _pwApiClient.GetTokenAsync(authRequestDto.Email, authRequestDto.Password); ;
 			var authResponseDto = await _pwApiClient.AuthorizeAsync(authRequestDto);
 
 			if (authResponseDto != null && authResponseDto.Success && authResponseDto.Data != null)
 			{
-				var auth = new Auth(authResponseDto.Data.UserId, authResponseDto.Data.SessionId);
+				
+				var auth = new Auth(authResponseDto.Data.UserId, token.AccessToken);
 				_settingsProvider.SaveAuth(auth);
 				return auth;
 			}

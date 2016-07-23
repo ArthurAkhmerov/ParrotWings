@@ -27,15 +27,16 @@
 			};
 
 			this.setupEvents(() => {
-				var auth = this.authService.getAuth();
-				if (auth.isSignedIn) {
-					this.userService.joinUser(auth.userId, auth.sessionId);
+				var token = this.authService.getTokenData();
+				if (token) {
+					this.userService.loadUserData().then(data => {
+						this.applyFilter();
+						this.userService.joinUser(this.getCurrentUser().id);
+					});
 				}
 			});
 
-			this.userService.loadUserData().then(data => {
-				this.applyFilter();
-			});
+			
 		}
 
 
@@ -50,13 +51,13 @@
 
 		public applyFilter() {
 			this.updateCurrentDuration();
-			var auth = this.authService.getAuth();
-
+			var token = this.authService.getTokenData();
+			
 			if (this.usernameInput && this.usernameInput.trim() != '') {
-				this.pwApiClient.getTransfersCountByUserTo(this.getCurrentUser().id, this.usernameInput, this.duration, auth.sessionId)
+				this.pwApiClient.getTransfersCountByUserTo(this.getCurrentUser().id, this.usernameInput, this.duration, token.access_token)
 					.success(result => this.transfersCount = result);
 			} else {
-				this.pwApiClient.getTransfersCount(auth.userId, this.duration, auth.sessionId)
+				this.pwApiClient.getTransfersCount(this.getCurrentUser().id, this.duration, token.access_token)
 					.success(result => this.transfersCount = result);
 			}
 

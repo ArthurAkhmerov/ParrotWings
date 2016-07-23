@@ -49,6 +49,8 @@ namespace PW.Mobile.Core.ViewModels
 			{
 				return _tryLoginCommand = _tryLoginCommand ?? new MvxCommand(async () =>
 				{
+					
+
 					var auth = await _authService.SignIn(Email, Password);
 
 					if (auth != null)

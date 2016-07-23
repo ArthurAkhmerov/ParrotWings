@@ -136,7 +136,7 @@ namespace PW.Mobile.Core.Services.Implementations
 		public async Task LoadTransfersAsync(DateTime from, DateTime to)
 		{
 			var auth = this._authService.GetAuth();
-			var dtos = await _pwApiClient.GetTransfersAsync(auth.UserId, from, to, auth.SessionId);
+			var dtos = await _pwApiClient.GetTransfersAsync(auth.UserId, from, to, auth.AccessToken);
 
 			_transfers.Clear();
 
@@ -152,7 +152,7 @@ namespace PW.Mobile.Core.Services.Implementations
 			var auth = _authService.GetAuth();
 			if (auth == null) return new SendTransferResultVDTO { Success = false };
 
-			return await _pwHub.SendTransferAsync(dto, auth.SessionId);
+			return await _pwHub.SendTransferAsync(dto);
 		}
 	}
 }

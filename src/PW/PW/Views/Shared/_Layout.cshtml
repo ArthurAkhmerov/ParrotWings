@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -17,6 +18,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+                @{
+                    var identity = User.Identity as ClaimsIdentity;
+                    var username = identity.Claims.FirstOrDefault(x => x.Type == "username")?.Value;
+
+                }
+                Name: @username
                 @Html.ActionLink("PW Application", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">

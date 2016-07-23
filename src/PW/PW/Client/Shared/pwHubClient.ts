@@ -32,22 +32,20 @@
 			connection.start().done(function () { callback.apply() });
 		}
 
-		public joinUser(userId: string, sessionId: string) {
+		public joinUser(userId: string) {
 			var dto: any = {
 				ClientId: "",
 				UserId: userId,
 			};
 
-			var hash = this.securityProvider.calculateMD5(dto, sessionId);
-			this.pwHubProxy.invoke('joinUser', dto, hash);
+			this.pwHubProxy.invoke('joinUser', dto);
 
 		}
 
-		public sendTransfer(dto: ITransferRequestVDTO, sessionId: string): ng.IPromise<ISendTransferResultVDTO> {
+		public sendTransfer(dto: ITransferRequestVDTO): ng.IPromise<ISendTransferResultVDTO> {
 			var deferred = this.$q.defer();
 			
-			var hash = this.securityProvider.calculateMD5(dto.userFromId, dto.amount, dto.recipientsIds, sessionId);
-			var result = this.pwHubProxy.invoke('sendTransfer', dto, hash)
+			var result = this.pwHubProxy.invoke('sendTransfer', dto)
 				.then((result: ISendTransferResultVDTO) => {
 					deferred.resolve(result);
 				});

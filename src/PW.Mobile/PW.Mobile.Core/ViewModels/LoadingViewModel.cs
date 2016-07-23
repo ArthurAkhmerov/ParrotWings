@@ -45,7 +45,7 @@ namespace PW.Mobile.Core.ViewModels
 			MessageInfo = "Loading transactions...";
 			await _transferService.LoadTransfersAsync(DateTime.Now.AddMonths(-2), DateTime.Now.AddMonths(2));
 
-			await _userService.JoinUserAsync(auth.UserId, auth.SessionId);
+			await _userService.JoinUserAsync(auth.UserId);
 
 			ShowViewModel<MainViewModel>();
 			Close(this);

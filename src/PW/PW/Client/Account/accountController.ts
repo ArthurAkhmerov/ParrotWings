@@ -24,10 +24,10 @@
 			this.serverErrors = [];
 			if (!this.checkForSignInErrors()) {
 				this.authService.signIn(this.email, this.password).then(result => {
-					if (result.success) {
+					if (result) {
 						location.href = location.origin + "/transfer";
 					} else {
-						this.authErrors.push({ code: "serverError", message: result.message });
+						this.authErrors.push({ code: "serverError", message: "The email and password you entered don't match." });
 					}
 				}).catch(reason => {
 					this.serverErrors.push({ code: "server", message: reason });

@@ -7,7 +7,7 @@
 		getUserById(id: string): IUserVDTO;
 		getCurrentUser(): IUserVDTO;
 		addUser(user: IUserVDTO): void;
-		joinUser(userId: string, sessionId: string);
+		joinUser(userId: string);
 		updateUserState(userId: string, state: string): void;
 		loadUserData(): ng.IPromise<IUserVDTO>;
 		loadUserById(userId: string): ng.IPromise<IUserVDTO>;
@@ -50,9 +50,10 @@
 		public loadUserData(): ng.IPromise<IUserVDTO> {
 			var deferred = this.$q.defer<IUserVDTO>();
 
-			var auth = this.authService.getAuth();
-			if (auth && auth.isSignedIn) {
-				this.pwApiClient.getUserById(auth.userId)
+			var currentUserId = this.authService.getCurrentUserId();
+			var token = this.authService.getTokenData();
+			if (token) {
+				this.pwApiClient.getUserById(currentUserId)
 					.success((data: IUserVDTO) => {
 						this.currentUser = data;
 						deferred.resolve(this.currentUser);
@@ -108,8 +109,8 @@
 			this.users.push(user);
 		}
 
-		public joinUser(userId: string, sessionId: string) {
-			this.pwHubClient.joinUser(userId, sessionId);
+		public joinUser(userId: string) {
+			this.pwHubClient.joinUser(userId);
 		}
 
 		public updateUserState(userId: string, state: string): void {

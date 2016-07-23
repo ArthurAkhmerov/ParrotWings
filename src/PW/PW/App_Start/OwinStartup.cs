@@ -4,47 +4,58 @@
 //using Ninject.Http;
 //using Owin;
 
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IdentityModel.Tokens;
 using System.Web.Http;
+using IdentityServer3.AccessTokenValidation;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.AspNet.SignalR.Infrastructure;
+using Microsoft.Owin;
+using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.OAuth;
 using Owin;
+using PW.Domain.Repositories;
+using PW.Persistence.Repositories;
+using PW.Providers;
 
 namespace PW
 {
 	public class OwinStartup
 	{
-		
+		private NinjectSignalRDependencyResolver _resolver;
 
 		public void Configuration(IAppBuilder app)
 		{
-
 			var kernel = NinjectHttpContainer.Kernel;
-			var resolver = new NinjectSignalRDependencyResolver(kernel);
-
-			//kernel.Bind(typeof(IHubConnectionContext<dynamic>)).ToMethod(context =>
-			//		resolver.Resolve<IConnectionManager>().GetHubContext<ChatHub>().Clients
-			//		 ).WhenInjectedInto<ITr>();
+			_resolver = new NinjectSignalRDependencyResolver(kernel);
+			ConfigureOAuth(app);
 
 			var config = new HubConfiguration();
-			config.Resolver = resolver;
-			//app.UseCors(CorsOptions.AllowAll);
+			config.Resolver = _resolver;
 			app.MapSignalR(config);
-
-			//GlobalConfiguration.Configuration
-			//	.UseSqlServerStorage(ConfigurationManager.ConnectionStrings["chat"].ConnectionString);
+			
 
 			NinjectHttpContainer.RegisterModules(NinjectHttpModules.Modules);
-			//GlobalConfiguration.Configuration.UseNinjectActivator(NinjectHttpContainer.Kernel);
+		}
 
-			//NinjectHttpContainer.Kernel.Get<IUpdateUsersJob>().Start();
+		public void ConfigureOAuth(IAppBuilder app)
+		{
+			OAuthAuthorizationServerOptions OAuthServerOptions = new OAuthAuthorizationServerOptions()
+			{
+				AllowInsecureHttp = true,
+				TokenEndpointPath = new PathString("/token"),
+				AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
+				Provider = new SimpleAuthorizationServerProvider(_resolver.Resolve<IUserRepository>()),
+				
+			};
 
-			//app.UseHangfireDashboard("/hangfire", new DashboardOptions
-			//{
-			//	AuthorizationFilters = new[] { new OwinAuthorizationFilter() }
-			//});
-			//app.UseHangfireServer();
-
+			// Token Generation
+			app.UseOAuthAuthorizationServer(OAuthServerOptions);
+			app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
 
 		}
 	}

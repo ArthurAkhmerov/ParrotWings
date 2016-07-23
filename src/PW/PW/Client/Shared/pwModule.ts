@@ -1,6 +1,6 @@
 ﻿
 module PW {
-    var pwApp = angular.module('PW', ['ui.bootstrap', 'ui.router', 'ngCookies', 'daterangepicker']);
+    var pwApp = angular.module('PW', ['ui.bootstrap', 'ui.router', 'ngCookies', 'daterangepicker', 'ngResource']);
 
 
 	pwApp.filter('time', function () {

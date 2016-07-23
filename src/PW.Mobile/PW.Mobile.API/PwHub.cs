@@ -50,9 +50,9 @@ namespace PW.Mobile.API
 		event UserJoinedEventHandler UserJoined;
 		event UserLeavedEventHandler UserLeft;
 
-		Task<SendTransferResultVDTO> SendTransferAsync(TransferRequestVDTO dto, Guid sessionId);
-		Task JoinUserAsync(Guid userId, Guid sessionId);
-		Task LeaveUserAsync(Guid userId, Guid sessionId);
+		Task<SendTransferResultVDTO> SendTransferAsync(TransferRequestVDTO dto);
+		Task JoinUserAsync(Guid userId);
+		Task LeaveUserAsync(Guid userId);
 	}
 
 	public class PwHub : IPwHub
@@ -87,13 +87,11 @@ namespace PW.Mobile.API
 		public event UserJoinedEventHandler UserJoined;
 		public event UserLeavedEventHandler UserLeft;
 
-		public async Task<SendTransferResultVDTO> SendTransferAsync(TransferRequestVDTO dto, Guid sessionId)
+		public async Task<SendTransferResultVDTO> SendTransferAsync(TransferRequestVDTO dto)
 		{
 			try
 			{
-				var hash = _securityProvider.CalculateMD5(dto.UserFromId, dto.Amount, dto.RecipientsIds, sessionId);
-
-				return await _hubProxy.Invoke<SendTransferResultVDTO>("SendTransfer", dto, hash);
+				return await _hubProxy.Invoke<SendTransferResultVDTO>("SendTransfer", dto);
 			}
 			catch (Exception ex)
 			{
@@ -102,7 +100,7 @@ namespace PW.Mobile.API
 
 		}
 
-		public async Task JoinUserAsync(Guid userId, Guid sessionId)
+		public async Task JoinUserAsync(Guid userId)
 		{
 			await _hubConnection.Start();
 
@@ -112,19 +110,16 @@ namespace PW.Mobile.API
 				UserId = userId,
 			};
 
-			var hash = _securityProvider.CalculateMD5(dto, sessionId);
-
-			await _hubProxy.Invoke("JoinUser", dto, hash);
+			await _hubProxy.Invoke("JoinUser", dto);
 		}
 
 		
 
-		public async Task LeaveUserAsync(Guid userId, Guid sessionId)
+		public async Task LeaveUserAsync(Guid userId)
 		{
 			var dto = new UserVDTO { Id = userId };
-			var hash = _securityProvider.CalculateMD5(dto, sessionId);
 
-			await _hubProxy.Invoke("LeaveUser", dto, hash);
+			await _hubProxy.Invoke("LeaveUser", dto);
 		}
 
 	}

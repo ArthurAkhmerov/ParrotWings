@@ -53,10 +53,10 @@ namespace PW.Mobile.Core.Services.Implementations
 			_users = _users.OrderBy(x => x.Username).ToList();
 		}
 
-		public async Task JoinUserAsync(Guid userId, Guid sessionId)
+		public async Task JoinUserAsync(Guid userId)
 		{
 			
-			await _pwHub.JoinUserAsync(userId, sessionId);
+			await _pwHub.JoinUserAsync(userId);
 		}
 
 		public void ChangeBalance(int value)

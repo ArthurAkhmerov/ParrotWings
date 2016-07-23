@@ -56,6 +56,7 @@ namespace PW
 				.Include("~/Scripts/angular-ui-router.js")
 				.Include("~/Scripts/angular-animate.min.js")
 				.Include("~/Scripts/angular-cookies.js")
+				.Include("~/Scripts/angular-resource.min.js")
 				.Include("~/Scripts/ui-bootstrap-tpls.js")
 				.Include("~/Client/Shared/daterangepicker.js")
 				.Include("~/Scripts/angular-daterangepicker.js");

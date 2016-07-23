@@ -7,16 +7,16 @@ namespace PW.Mobile.Core.Model
 {
 	public class Auth
 	{
-		public Auth(Guid userId, Guid sessionId,
+		public Auth(Guid userId, string accessToken,
 			bool isLoggedIn = true)
 		{
 			UserId = userId;
-			SessionId = sessionId;
+			AccessToken = accessToken;
 			IsLoggedIn = isLoggedIn;
 		}
 
 		public bool IsLoggedIn { get; set; }
 		public Guid UserId { get; }
-		public Guid SessionId { get; }
+		public string AccessToken { get; set; }
 	}
 }

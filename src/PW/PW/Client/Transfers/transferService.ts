@@ -35,9 +35,10 @@
 
 		public loadTransfers(duration: Duration, paging: PagingData): ng.IPromise<Transfer[]> {
 			var deferred = this.$q.defer<Transfer[]>();
-			var auth = this.authService.getAuth();
+			var currentUserId = this.authService.getCurrentUserId();
+			var token = this.authService.getTokenData();
 			
-			this.pwApiClient.getTransfers(auth.userId, duration, paging, auth.sessionId)
+			this.pwApiClient.getTransfers(currentUserId, duration, paging, token.access_token)
 				.success((data: ITransferVDTO[]) => {
 					var dtos = _.sortBy(data, x => x.createdAt);
 					this.transfers = _.map(data, x => this.createTransfer(x));
@@ -51,9 +52,9 @@
 
 		public loadTransfersByUserTo(usernameTo: string, duration: Duration, paging: PagingData): ng.IPromise<Transfer[]> {
 			var deferred = this.$q.defer<Transfer[]>();
-			var auth = this.authService.getAuth();
-
-			this.pwApiClient.getTransfersByUserTo(auth.userId, usernameTo, duration, paging, auth.sessionId)
+			var currentUserId = this.authService.getCurrentUserId();
+			var token = this.authService.getTokenData();
+			this.pwApiClient.getTransfersByUserTo(currentUserId, usernameTo, duration, paging, token.access_token)
 				.success((data: ITransferVDTO[]) => {
 					var dtos = _.sortBy(data, x => x.createdAt);
 					this.transfers = _.map(data, x => this.createTransfer(x));
@@ -79,7 +80,7 @@
 		public sendTransfer(dto: ITransferRequestVDTO): ng.IPromise<ISendTransferResultVDTO> {
 			var deferred = this.$q.defer();
 
-			this.pwHubClient.sendTransfer(dto, this.authService.getAuth().sessionId)
+			this.pwHubClient.sendTransfer(dto)
 				.then(result => deferred.resolve(result))
 				.catch(reason => deferred.reject(reason));
 

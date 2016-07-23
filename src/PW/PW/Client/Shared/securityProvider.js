@@ -18,4 +18,3 @@ var PW;
     angular.module("PW")
         .factory("PW.SecurityProvider", [function () { return new SecurityProvider(); }]);
 })(PW || (PW = {}));
-//# sourceMappingURL=securityProvider.js.map

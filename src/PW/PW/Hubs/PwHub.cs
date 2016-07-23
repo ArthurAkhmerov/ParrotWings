@@ -39,17 +39,10 @@ namespace PW.Hubs
 			_securityProvider = securityProvider;
 		}
 
-		public SendTransferResultVDTO SendTransfer(TransferRequestVDTO dto, string hash)
+		public SendTransferResultVDTO SendTransfer(TransferRequestVDTO dto)
 		{
 			try
 			{
-				var sessions = _sessionRepository.ListByUser(dto.UserFromId);
-
-				if (sessions.All(x => _securityProvider.CalculateMD5(dto.UserFromId, dto.Amount, dto.RecipientsIds, x.Id) != hash))
-				{
-					return new SendTransferResultVDTO {Success = false};
-				}
-
 				var transfers = dto.RecipientsIds.Select(userToId => 
 					new Transfer(_userRepository.GetByKey(dto.UserFromId), _userRepository.GetByKey(userToId), dto.Amount))
 					.ToArray();
@@ -75,16 +68,11 @@ namespace PW.Hubs
 			}
 		}
 
-		public void JoinUser(PwClient dto, string hash)
+		public void JoinUser(PwClient dto)
 		{
 			try
 			{
 				var joinedUser = _userRepository.GetByKey(dto.UserId);
-				var sessions = _sessionRepository.ListByUser(joinedUser.Id);
-
-				if (sessions.All(x => _securityProvider.CalculateMD5(new { ClientId = dto.ClientId, UserId = dto.UserId }, x.Id) != hash
-						&& _securityProvider.CalculateMD5(dto, x.Id) != hash))
-					return;
 				
 
 				joinedUser.MarkLoggedIn();
@@ -111,13 +99,8 @@ namespace PW.Hubs
 			}
 		}
 
-		public void LeaveUser(UserVDTO dto, string hash)
+		public void LeaveUser(UserVDTO dto)
 		{
-			var sessions = _sessionRepository.ListByUser(dto.Id);
-
-			if (sessions.All(x => _securityProvider.CalculateMD5(dto, x.Id) != hash))
-				return;
-
 			LeaveUser(new PwClient() { UserId = dto.Id, ClientId = Context.ConnectionId});
 		}
 

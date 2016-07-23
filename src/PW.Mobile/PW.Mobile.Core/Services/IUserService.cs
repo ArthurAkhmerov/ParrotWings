@@ -14,7 +14,7 @@ namespace PW.Mobile.Core.Services
 		IReadOnlyCollection<User> GetUsers();
 		User GetCurrentUser();
 		Task LoadUsersAsync();
-		Task JoinUserAsync(Guid userId, Guid sessionId);
+		Task JoinUserAsync(Guid userId);
 		void ChangeBalance(int value);
 	}
 
